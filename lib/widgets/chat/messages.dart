@@ -18,27 +18,28 @@ class Messages extends StatelessWidget {
           );
         }
         return StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('chat')
-              .orderBy('createdAt', descending: true)
-              .snapshots(),
-          builder: (ctx, chatSnapShot) {
-            if (chatSnapShot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
+            stream: FirebaseFirestore.instance
+                .collection('chat')
+                .orderBy('createdAt', descending: true)
+                .snapshots(),
+            builder: (ctx, chatSnapShot) {
+              if (chatSnapShot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              final chatDocs = chatSnapShot.data!.docs;
+
+              return ListView.builder(
+                reverse: true,
+                itemCount: chatDocs.length,
+                itemBuilder: (ctx, index) => MessageBuddle(
+                  message: chatDocs[index]['text'],
+                  isMe: chatDocs[index].data()['userId'] == futureSnapshot.data?.uid,
+                  key: ValueKey(chatDocs[index]),
+                ),
               );
-            }
-            final chatDocs = chatSnapShot.data!.docs;
-            return ListView.builder(
-              reverse: true,
-              itemCount: chatDocs.length,
-              itemBuilder: (ctx, index) => MessageBuddle(
-                message: chatDocs[index]['text'],
-                isMe: chatDocs[index]['userId'] == futureSnapshot.data?.uid,
-              ),
-            );
-          },
-        );
+            });
       },
     );
   }
