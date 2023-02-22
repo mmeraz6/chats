@@ -68,8 +68,8 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                   key: const ValueKey('username'),
                   validator: (value) {
-                    if (value!.isEmpty || value.length < 4) {
-                      return 'Usernames need to be at least 4 characters';
+                    if (value!.isEmpty || value.length < 5) {
+                      return 'Usernames need to be at least 5 characters';
                     }
                     return null;
                   },
