@@ -35,7 +35,6 @@ class _AuthFormState extends State<AuthForm> {
         _isLogin,
         context,
       );
-      // use those values to send auth request
     }
   }
 
@@ -43,76 +42,81 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-      margin: EdgeInsets.all(25),
+      margin: const EdgeInsets.all(25),
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Form(
             key: _formKey,
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              TextFormField(
-                key: const ValueKey('email'),
-                validator: (value) {
-                  if (value!.isEmpty || !value.contains('@')) {
-                    return 'Please enter a valid email address.';
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'Email Address'),
-                onSaved: (value) {
-                  _userEmail = value!;
-                },
-              ),
-              if (!_isLogin)
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircleAvatar(radius: 40,),
+                // FlatButton.icon(),
                 TextFormField(
-                  key: const ValueKey('username'),
+                  key: const ValueKey('email'),
                   validator: (value) {
-                    if (value!.isEmpty || value.length < 5) {
-                      return 'Usernames need to be at least 5 characters';
+                    if (value!.isEmpty || !value.contains('@')) {
+                      return 'Please enter a valid email address.';
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(labelText: 'Username'),
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(labelText: 'Email Address'),
                   onSaved: (value) {
-                    _userName = value!;
+                    _userEmail = value!;
                   },
                 ),
-              TextFormField(
-                key: const ValueKey('password'),
-                validator: (value) {
-                  if (value!.isEmpty || value.length < 7) {
-                    return 'Password must be at least 7 characters long';
-                  }
-                  return null;
-                },
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                onSaved: (value) {
-                  _userPassword = value!;
-                },
-              ),
-              const SizedBox(
-                height: 13,
-              ),
-              if (widget.isLoading) CircularProgressIndicator(),
-              if (!widget.isLoading)
-                ElevatedButton(
-                  child: Text(_isLogin ? 'Login' : 'Sign Up'),
-                  onPressed: _trySubmit,
-                ),
-              if (!widget.isLoading)
-                TextButton(
-                  child: Text(_isLogin
-                      ? 'Create New Account'
-                      : 'I already have an account'),
-                  onPressed: () {
-                    setState(() {
-                      _isLogin = !_isLogin;
-                    });
+                if (!_isLogin)
+                  TextFormField(
+                    key: const ValueKey('username'),
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 5) {
+                        return 'Usernames need to be at least 5 characters';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(labelText: 'Username'),
+                    onSaved: (value) {
+                      _userName = value!;
+                    },
+                  ),
+                TextFormField(
+                  key: const ValueKey('password'),
+                  validator: (value) {
+                    if (value!.isEmpty || value.length < 7) {
+                      return 'Password must be at least 7 characters long';
+                    }
+                    return null;
                   },
-                )
-            ]),
+                  decoration: const InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                  onSaved: (value) {
+                    _userPassword = value!;
+                  },
+                ),
+                const SizedBox(
+                  height: 13,
+                ),
+                if (widget.isLoading) CircularProgressIndicator(),
+                if (!widget.isLoading)
+                  ElevatedButton(
+                    onPressed: _trySubmit,
+                    child: Text(_isLogin ? 'Login' : 'Sign Up'),
+                  ),
+                if (!widget.isLoading)
+                  TextButton(
+                    child: Text(_isLogin
+                        ? 'Create New Account'
+                        : 'I already have an account'),
+                    onPressed: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                      });
+                    },
+                  ),
+              ],
+            ),
           ),
         ),
       ),
